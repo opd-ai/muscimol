@@ -128,7 +128,7 @@ type Router interface {
     // NextHop returns the best next-hop net.Addr for a destination IPv6 prefix.
     NextHop(dst net.IP) (net.Addr, error)
     // Metrics returns the current path metric (latency ms + hop count * weight).
-    Metrics(pubkey [32]byte) PathMetric
+    Metrics(pubkey [32]byte) (PathMetric, error)
 }
 ```
 
@@ -246,7 +246,7 @@ WireGuard's default MTU is 1420 bytes; after WireGuard's 60-byte overhead the ci
 
 Data traverses WireGuard ChaCha20-Poly1305, then `transport.NoiseTransport` Noise_IK_25519_ChaChaPoly1305_SHA256, then Tox UDP framing. Combined overhead ≈ 120 B per packet plus two symmetric-key operations per packet.
 
-**Mitigation**: Noise-IK provides session reuse via `noise.IKHandshake`; the per-packet cost is one AEAD pass on the Tox layer. On modern hardware (AES-NI or ChaCha20 SIMD), this adds < 5 µs per packet. Consider allowing WireGuard's built-in encryption to be replaced with a pass-through mode when Noise-IK already guarantees confidentiality (Phase 2 optimisation).
+**Mitigation**: Noise-IK provides session reuse via `noise.IKHandshake`; the per-packet cost is one AEAD pass on the Tox layer. On modern hardware (AES-NI or ChaCha20 SIMD), this adds < 5 µs per packet. If future profiling shows this double-encryption cost is problematic and you choose to rely solely on WireGuard for confidentiality, the optimisation path is to remove the extra Noise-IK layer rather than attempting to disable or replace WireGuard's built-in encryption (which does not support an unencrypted/pass-through mode).
 
 ---
 

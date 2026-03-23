@@ -10,8 +10,8 @@
 //
 // This scheme is fully deterministic — no coordination server is required.
 // Every node independently derives the same overlay address for any given key.
-// The fc00::/7 ULA range was chosen for cjdns interoperability: cjdns uses the
-// same SHA-512-then-fc00-prefix derivation.
+// The fc00::/8 ULA subrange was chosen for cjdns interoperability: cjdns uses
+// the same SHA-512 derivation with the first byte forced to 0xfc (fc00::/8).
 //
 // Key management delegates to toxcore:
 //   - crypto.GenerateKeyPair()   — generate a new Curve25519 key pair

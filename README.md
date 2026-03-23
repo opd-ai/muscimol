@@ -3,7 +3,7 @@
 A decentralized mesh-network daemon written in pure Go.
 
 - **Peer discovery** via `github.com/opd-ai/toxcore` DHT (`dht.RoutingTable`, 256 k-buckets, XOR distance)
-- **Encrypted transport** via WireGuard-Go userspace (`golang.zx2c4.com/wireguard`) carried over `transport.NoiseTransport` (Noise_IK_25519_ChaChaPoly_SHA256)
+- **Encrypted transport** via WireGuard-Go userspace (`golang.zx2c4.com/wireguard`) carried over `transport.NoiseTransport` (Noise_IK_25519_ChaChaPoly1305_SHA256)
 - **Deterministic IPv6 addressing** — `fc00::/8` from SHA-512(Curve25519 pubkey), cjdns-compatible
 - **NAT traversal** via `transport.NATTraversal` / `transport.HolePuncher` / `transport.AdvancedNATTraversal`
 - **Interoperability** with dn42, cjdns, and Yggdrasil via a BGP/static-route gateway (`github.com/osrg/gobgp/v3`)

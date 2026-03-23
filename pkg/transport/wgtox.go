@@ -26,7 +26,10 @@
 // All net.Addr values are toxnet.ToxAddr; no *net.UDPAddr is used anywhere.
 package transport
 
-import "net"
+import (
+	"context"
+	"net"
+)
 
 // MaxToxMessage is the maximum number of bytes in a single Tox lossless message.
 const MaxToxMessage = 1372
@@ -56,10 +59,10 @@ type MeshTransport interface {
 	//  2. Calls transport.NATTraversal.PunchHole (with HolePuncher fallback).
 	//  3. Completes the noise.IKHandshake.
 	//  4. Returns the resulting toxnet.ToxConn wrapped as net.Conn.
-	DialPeer(ctx interface{ Done() <-chan struct{} }, pubkey [32]byte) (net.Conn, error)
+	DialPeer(ctx context.Context, pubkey [32]byte) (net.Conn, error)
 
 	// ListenPeer accepts inbound WireGuard session requests.
-	ListenPeer(ctx interface{ Done() <-chan struct{} }) (net.Conn, error)
+	ListenPeer(ctx context.Context) (net.Conn, error)
 
 	// LocalAddr returns this node's canonical address (toxnet.ToxAddr).
 	LocalAddr() net.Addr
